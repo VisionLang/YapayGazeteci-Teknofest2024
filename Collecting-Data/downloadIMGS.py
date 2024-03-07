@@ -5,7 +5,7 @@ import os
 def get_data():
     df_list = []
 
-    data_path = '../Data/news-Data/'
+    data_path = '../Data/'
 
     for path in os.listdir(data_path):
         if path.split(".")[1] == 'csv':
@@ -20,7 +20,8 @@ def get_data():
 
     return df
 
-def download_img(url, content_url, folder):
+def download_img(url, content_url):
+    folder = '../Data/imgs' 
     try:    
         response = requests.get(url)
         if response.status_code == 200:
@@ -64,11 +65,14 @@ def main():
         content_url = df[df['Img_url'] == img_url]['Content_url'].values[0]
         content_url = content_url.replace('/', '_')
 
-        img_path = download_img(img, content_url, folder)
+        img_path = download_img(img, content_url)
 
         if img_path:
             df.at[i, 'img_path'] = img_path
 
-    df.to_csv('../Data/aaa.csv', index=False)  
-    
+    df.to_csv('../Data/news-data-with-imgs.csv', index=False)  
+
     return df
+
+if __name__ == '__main__':
+    main()
