@@ -5,19 +5,10 @@ import os
 def get_data():
     df_list = []
 
-    data_path = '../Data/'
+    data_path = '../Data/news-data.csv'
 
-    for path in os.listdir(data_path):
-        if path.split(".")[1] == 'csv':
-            df = pd.read_csv(data_path + path)
-            df_list.append(df)
-
-    data = pd.concat(
-        df_list, ignore_index=False
-    )
-    df = data.copy()
-    df = df.drop(columns=['Unnamed: 0'])
-
+    df = pd.read_csv(data_path)
+    df = df.iloc[:100]
     return df
 
 def download_img(url, content_url):
