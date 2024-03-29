@@ -4,11 +4,10 @@ def categorize_news_type(news_type, types_list, return_type):
     else:
         return news_type
 
-
 def category_reducer(df):
 
     ##---------Yerel---------
-    with open("C:/Users/90530/Desktop/GitHub-Projects/NewsGeneration-NLP-Teknofest/Preprocess-Data/iller.txt", 'r', encoding='utf-8') as f:
+    with open("../Preprocess-Data/iller.txt", 'r', encoding='utf-8') as f:
         cities = f.readlines()
 
     cities = [city.strip() for city in cities] + [

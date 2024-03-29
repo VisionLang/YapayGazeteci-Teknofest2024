@@ -8,16 +8,16 @@ def get_data():
     df = df.iloc[:1000]
     return df
 
-def download_img(url, content_url):
-    folder = '../Data/imgs' 
+def download_img(url, content_url, index):
     try:
         response = requests.get(url)
         if response.status_code == 200:
             img_type = url.split('.')[-1]
             content_url = content_url.strip()
-            img_name = content_url.replace('/', '_') + '.' + img_type
+            # img_name = content_url.replace('/', '_') + '.' + img_type
+            img_name = "img_" + str(index+1) + '.' + img_type
 
-            img_path = os.path.join(folder, img_name)
+            img_path = os.path.join(img_folder, img_name)
 
             if os.path.exists(img_path):
                 return img_path
@@ -37,10 +37,27 @@ def download_img(url, content_url):
 def main():
     df = get_data()
 
-    folder = '../Data/imgs' 
+    global img_folder
+    img_folder = '../Data/imgs'
 
-    os.makedirs(folder, exist_ok=True)
-     
+    if not os.path.exists(img_folder):
+        os.makedirs(img_folder)
+    
+    else:
+        # Delete all files in the folder and recreate it
+        for file in os.listdir(img_folder):
+            file_path = os.path.join(img_folder, file)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+            except Exception as e:
+                print(f"Error deleting file {file_path}: {e}")
+
+    csv_file = '../Data/news-data-with-imgs.csv'
+
+    if os.path.exists(csv_file):
+        os.remove(csv_file)
+    
     for i, img_url in enumerate(df['Img_url']):
         try:
             img = img_url.split('?u=')[1]
@@ -50,12 +67,12 @@ def main():
         content_url = df.at[i, 'Content_url']
         content_url = content_url.replace('/', '_')
 
-        img_path = download_img(img, content_url)
+        img_path = download_img(img, content_url, i)
 
         if img_path:
             df.at[i, 'img_path'] = img_path
 
-    df.to_csv('../Data/news-data-with-imgs.csv', index=False)  
+    df.to_csv(csv_file, index=False)  
 
     return df
 
