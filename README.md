@@ -12,7 +12,6 @@ The dataset consist of news titles, news content and images. The dataset is in T
 
 ## Data-Preprocessing
 
-````md
 ```python
 sample_title = "Bursa’da servis minibüsü üst geçit inşaat alanına düştü!"
 ```
@@ -29,10 +28,7 @@ index_to_word = {0: "Bursa", 1: "da", 2: "servis", 3: "minibüsü", 4: "üst", 5
 tokenized_title = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 ```
 
-```
 ## Model
 
 The model is a combination of CNN and LSTM, where the image is fed to the Encoder(CNN) and the output of the CNN is
 fed to the Decoder(LSTM) along with the input text.
-```
-````
