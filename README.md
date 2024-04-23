@@ -12,23 +12,28 @@ The dataset consist of news titles, news content and images. The dataset is in T
 
 ## Data-Preprocessing
 
-```python
-sample_title = "Bursa’da servis minibüsü üst geçit inşaat alanına düştü!"
-```
+- Sample Data:
+  ![image](https://isbh.tmgrup.com.tr/sbh/2022/03/31/balikesirde-tarihi-binada-baslayan-ve-restorana-sicrayan-yangin-sonduruldu-1648686422986.jpeg)
 
-![image](https://isbh.tmgrup.com.tr/sbh/2021/12/17/bursada-servis-minibusu-ust-gecit-insaat-alanina-dustu-5-kisi-yaralandi-1639700937583.jpg)
+  ```python
+    title = "Balıkesir’de tarihi bina yangında küle döndü"
+    word_index = {'Balıkesir’de': 9, 'tarihi': 5, 'bina': 3, 'yangında': 7, 'küle': 5, 'döndü': 6 }
+    tokens: [start_token, 9, 5, 3, 7, 5, 6, end_token]
+  ```
 
-1. Tokenization
-
-```python
-sample_title = ["Bursa", "da", "servis", "minibüsü", "üst", "geçit", "inşaat", "alanına", "düştü", "!"]
-
-index_to_word = {0: "Bursa", 1: "da", 2: "servis", 3: "minibüsü", 4: "üst", 5: "geçit", 6: "inşaat", 7: "alanına", 8: "düştü", 9: "!"}
-
-tokenized_title = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-```
+  | Input                                       | Output    |
+  | ------------------------------------------- | --------- |
+  | Image + start_token                         | 9         |
+  | Image + start_token + 9                     | 5         |
+  | Image + start_token + 9 + 5                 | 3         |
+  | Image + start_token + 9 + 5 + 3             | 7         |
+  | Image + start_token + 9 + 5 + 3 + 7         | 5         |
+  | Image + start_token + 9 + 5 + 3 + 7 + 5     | 6         |
+  | Image + start_token + 9 + 5 + 3 + 7 + 5 + 6 | end_token |
 
 ## Model
 
 The model is a combination of CNN and LSTM, where the image is fed to the Encoder(CNN) and the output of the CNN is
 fed to the Decoder(LSTM) along with the input text.
+
+Balıkesir’de tarihi bina yangında küle döndü,"Hacıyusuf Mahallesi Yalı Sokak'taki tescilli yapı statüsünde bulunan bir binada henüz belirlenemeyen nedenle yangın çıktı.Binanın yanındaki restorana da sıçrayan yangın, bir hırsızlık olayı için bölgede inceleme yapan polis ekiplerince fark edilerek itfaiye ekiplerine bildirildi.Bölgeye çok sayıda itfaiye ekibi ile İlçe Emniyet Müdürlüğünden TOMA'lar sevk edildi. Çevre binalarda oturan vatandaşlar da yangın nedeniyle evlerinden tahliye edildi.Olay sırasında metruk bina ve restoranda çökmeler meydana gelirken, yan binanın dış cephe kaplamaları da yandı.İtfaiye ekiplerinin müdahalesiyle söndürülen yangında soğutma çalışmaları sürüyor.",/yasam/balikesirde-tarihi-binada-yangin-5932054,Yaşam,30.03.22-00:01,https://iasbh.tmgrup.com.tr/6c1939/752/395/0/57/800/477?u=https://isbh.tmgrup.com.tr/sbh/2022/03/31/balikesirde-tarihi-binada-baslayan-ve-restorana-sicrayan-yangin-sonduruldu-1648686422986.jpeg,../Data/imgs\img_246.jpeg
