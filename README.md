@@ -15,6 +15,8 @@ The dataset consist of news titles, news content and images. The dataset is in T
 - Sample Data:
   ![image](https://isbh.tmgrup.com.tr/sbh/2022/03/31/balikesirde-tarihi-binada-baslayan-ve-restorana-sicrayan-yangin-sonduruldu-1648686422986.jpeg)
 
+  ***
+
   ```python
     title = "Balıkesir’de tarihi bina yangında küle döndü"
     word_index = {'Balıkesir’de': 9, 'tarihi': 5, 'bina': 3, 'yangında': 7, 'küle': 5, 'döndü': 6 }
