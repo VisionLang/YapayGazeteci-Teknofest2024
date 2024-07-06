@@ -1,49 +1,51 @@
-import pandas as pd 
+import pandas as pd
 import requests
-import os 
+import os
 
 def get_data():
     data_path = '../Data/news-data.csv'
-    df = pd.read_csv(data_path)
-    df = df.iloc[:2000]
-    return df
+    try:
+        df = pd.read_csv(data_path)
+        df = df.iloc[:2]
+        return df
+    except Exception as e:
+        print(f"Error reading CSV file: {e}")
+        return pd.DataFrame()
 
-def download_img(url, content_url, index):
+def download_img(url, index):
     try:
         response = requests.get(url)
         if response.status_code == 200:
             img_type = url.split('.')[-1]
-            content_url = content_url.strip()
-            img_name = "img_" + str(index+1) + '.' + img_type
-
+            img_name = f"img_{index + 1}.{img_type}"
             img_path = os.path.join(img_folder, img_name)
 
-            if os.path.exists(img_path):
-                return img_path
-
-            with open(img_path, 'wb') as f:
-                f.write(response.content)
-
-            return img_path
+            if not os.path.exists(img_path):
+                with open(img_path, 'wb') as f:
+                    f.write(response.content)
+                return img_name  # Return only the image name
+            else:
+                return img_name  # Return only the image name
         else:
             print(f"Failed to download image from {url}. Status code: {response.status_code}")
             return None
-
     except Exception as e:
         print(f"Error downloading image from {url}: {e}")
         return None
 
 def main():
     df = get_data()
+    if df.empty:
+        print("No data to process.")
+        return
 
     global img_folder
     img_folder = '../Data/imgs'
 
     if not os.path.exists(img_folder):
         os.makedirs(img_folder)
-    
     else:
-        # Delete all files in the folder and recreate it
+        # Delete all files in the folder
         for file in os.listdir(img_folder):
             file_path = os.path.join(img_folder, file)
             try:
@@ -61,23 +63,19 @@ def main():
 
     for i, row in df.iterrows():
         img_url = row['Img_url']
-        try:
-            img = img_url.split('?u=')[1]
-        except IndexError:
-            img = img_url.split('?u=')[0]
-        
-        content_url = row['Content_url']
-        content_url = content_url.replace('/', '_')
-
-        img_path = download_img(img, content_url, i)
+        img_path = download_img(img_url, i)
 
         if img_path:
             row['img_path'] = img_path
             valid_rows.append(row)
 
     valid_df = pd.DataFrame(valid_rows)
-    valid_df.to_csv(csv_file, index=False)  
-    print(f"Downloaded {len(valid_df)} images")
+    try:
+        valid_df.to_csv(csv_file, index=False)
+        print(f"Downloaded {len(valid_df)} images")
+    except Exception as e:
+        print(f"Error saving CSV file: {e}")
+
     return valid_df
 
 if __name__ == '__main__':
